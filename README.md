@@ -1,279 +1,155 @@
-# 🚨 SiagaBencana
-## Platform Edukasi, Medis, & Pemulihan UMKM Pasca Bencana
 
-> **Tagline:**  
-> **"Tanggap Bencana. Pulihkan Kehidupan."**
+# 🚨 SiagaBencana: Platform Edukasi Terpadu & Pemulihan Pasca Bencana
 
-SiagaBencana adalah platform web terintegrasi yang menyediakan edukasi mitigasi bencana, panduan medis darurat, serta materi pemulihan ekonomi (UMKM) dalam satu sistem terpusat.
+<p align="center">
+  <img src="https://img.shields.io/badge/Laravel-FF2D20?style=for-the-badge&logo=laravel&logoColor=white" alt="Laravel">
+  <img src="https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white" alt="Tailwind">
+  <img src="https://img.shields.io/badge/MySQL-00000f?style=for-the-badge&logo=mysql&logoColor=white" alt="MySQL">
+  <img src="https://img.shields.io/badge/YouTube_API-FF0000?style=for-the-badge&logo=youtube&logoColor=white" alt="YouTube">
+</p>
 
-Dirancang khusus untuk wilayah terdampak bencana dengan:
-- Keterbatasan jaringan
-- Perangkat low-end
-- Kebutuhan informasi cepat & terverifikasi
+> **"Tanggap Bencana. Pulihkan Kehidupan."** > Sebuah sistem manajemen konten edukasi (LMS) berbasis video yang dirancang untuk mempercepat literasi mitigasi dan pemulihan ekonomi di wilayah terdampak bencana.
+
+---
+
+## 📑 Daftar Isi
+1. [Visi & Misi](#-visi--misi)
+2. [Pilar Utama (The Three Zones)](#-pilar-utama-sistem)
+3. [Fitur Unggulan](#-fitur-unggulan)
+4. [Arsitektur Sistem](#-arsitektur-sistem)
+5. [Panduan Instalasi](#-instalasi-lokal-development)
+6. [Kredensial Default](#-kredensial-akses)
+7. [Roadmap Pengembangan](#-roadmap)
 
 ---
 
 ## 🎯 Visi & Misi
 
-### 🎯 Visi
-Menjadi platform digital nasional untuk edukasi, respons, dan pemulihan pasca bencana yang:
-- Mudah diakses
-- Ringan
-- Terstruktur
-- Siap digunakan di kondisi darurat
+### 👁️ Visi
+Menjadi pusat rujukan digital nasional untuk edukasi mitigasi, respons medis darurat, dan pemulihan ekonomi pasca-bencana yang ringan, cepat, dan mudah diakses bahkan dalam kondisi keterbatasan jaringan.
 
-### 🎯 Misi
-- Menyediakan edukasi mitigasi bencana yang ramah anak
-- Mempercepat pemulihan UMKM pasca bencana
-- Menyediakan panduan medis dan SOP relawan berbasis digital
-- Mengurangi ketergantungan pada informasi tidak terverifikasi
+### 🚀 Misi
+- **Literasi Sejak Dini:** Mengemas edukasi bencana tanpa trauma untuk anak-anak.
+- **Resiliensi Ekonomi:** Membimbing pelaku UMKM untuk bangkit lebih cepat melalui manajemen keuangan darurat.
+- **Standarisasi Medis:** Menyediakan SOP digital yang ringkas bagi relawan dan tenaga medis di lapangan.
 
 ---
 
 ## 🧩 Pilar Utama Sistem
 
-### 🟦 1. Edukasi Anak — Zona Ceria
-**Fokus:**
-- Video animasi mitigasi bencana
-- Edukasi tanpa menimbulkan trauma
-- UI ramah anak:
-  - Warna cerah
-  - Font besar
-  - Navigasi visual
+| 🟦 Zona Ceria (Anak) | 🟩 Zona Bangkit (UMKM) | 🟥 Zona Siaga (Medis) |
+| :--- | :--- | :--- |
+| Fokus pada video animasi mitigasi. | Strategi pemulihan modal & usaha. | SOP P3K & Tanggap Darurat. |
+| **UI:** Warna cerah & Ikon besar. | **UI:** Professional & Informatif. | **UI:** High Contrast & To-the-point. |
+| Mengurangi trauma pasca-bencana. | Akses informasi bantuan modal. | Prosedur penanganan korban. |
 
 ---
 
-### 🟩 2. Pemulihan UMKM — Zona Bangkit
-**Fokus:**
-- Manajemen keuangan darurat
-- Strategi bangkit pasca bencana
-- Akses informasi bantuan & modal
-- Edukasi operasional usaha
+## 🚀 Fitur Unggulan
 
----
+### 🎥 YouTube-Style Learning Studio
+Sistem pengaplotan materi yang mengadopsi antarmuka YouTube untuk kemudahan penggunaan:
+- **Metadata Lengkap:** Judul, Deskripsi Panjang, Tags, dan Level (Pemula - Lanjut).
+- **YouTube Integration:** Menggunakan ID Video YouTube untuk menghemat *bandwidth* server dan penyimpanan.
+- **Auto-Thumbnail:** Sistem secara otomatis menarik gambar mini dari server YouTube berdasarkan ID.
 
-### 🟥 3. Medis & Relawan — Zona Siaga
-**Fokus:**
-- SOP pertolongan pertama
-- Panduan P3K
-- Prosedur tanggap darurat
-- Konten cepat & ringkas untuk kondisi lapangan
+### 🧭 Multi-Persona Experience
+Platform mendeteksi profil pengguna untuk menyajikan konten yang paling relevan sejak halaman utama:
+1. **User Discovery:** Memilih minat (Anak/UMKM/Medis) saat pertama kali masuk.
+2. **Dynamic Dashboard:** Tampilan yang berubah sesuai dengan kategori yang dipilih.
 
----
-
-## 🚀 Fitur Utama
-
-### 🎥 YouTube-Style Learning System
-- Tampilan grid video (thumbnail besar)
-- Filter berdasarkan topik bencana
-- Setiap video memiliki:
-  - Ringkasan teks
-  - Checklist tindakan
-  - Materi offline-friendly
-
----
-
-### 🧭 Multi-Persona UX
-UI otomatis menyesuaikan berdasarkan target pengguna:
-- Anak-anak
-- Pelaku UMKM
-- Tenaga medis / relawan
-
----
-
-### ⚡ Optimasi Performa
-- Minim JavaScript berat
-- Blade rendering server-side
-- Cocok untuk:
-  - HP spek rendah
-  - Koneksi lambat
-  - Area terdampak bencana
+### ⚡ Performance Optimized
+- **Server-Side Rendering:** Menggunakan Laravel Blade untuk kecepatan muat awal.
+- **Tailwind JIT:** Memastikan file CSS sangat kecil dan optimal.
+- **Database Indexing:** Optimasi pencarian pada judul dan tags video.
 
 ---
 
 ## 🏗️ Arsitektur Sistem
 
 ### 🧱 Tech Stack
+- **Framework:** Laravel 11/12 (Modern Structure)
+- **Frontend:** Blade Templating + Tailwind CSS
+- **Authentication:** Laravel Breeze (Customized)
+- **State Management:** Alpine.js
+- **Database:** MariaDB / MySQL 8.x
 
-| Layer        | Teknologi                |
-|---------------|---------------------------|
-| Backend       | Laravel 10 / 11          |
-| Frontend      | Blade + Tailwind CSS     |
-| Database      | MySQL                    |
-| Auth System   | Laravel Breeze           |
-| Storage       | Laravel Storage (Public) |
-| Server        | Apache / Nginx           |
-
----
-
-## 🗂️ Struktur Database (Konsep)
-
-Hierarki konten 3 level:
+### 🗂️ Skema Data
+Sistem menggunakan hierarki 3 level yang ketat untuk menjaga integritas data:
+```mermaid
+graph TD
+    A[Categories] --> B[Topics]
+    B --> C[Videos]
+    C --> D[Metadata: Tags, Desc, Level]
 
 ```
-
-Categories (Pilar)
-└── Topics (Topik)
-└── Videos (Konten)
-
-````
-
-### Contoh Struktur Tabel
-
-#### categories
-- id
-- name
-- slug
-- description
-
-#### topics
-- id
-- category_id
-- name
-- slug
-- description
-
-#### videos
-- id
-- topic_id
-- title
-- youtube_id
-- duration
-- summary_text
-- thumbnail_url
-- is_active
 
 ---
 
 ## 🛠️ Instalasi Lokal (Development)
 
-### Prasyarat
-- PHP >= 8.1
-- Composer
-- MySQL
-- XAMPP / Laragon / Valet
+### 1. Persiapan Environment
 
----
+Pastikan Anda memiliki:
 
-### Step-by-Step Setup
+* PHP >= 8.2
+* Composer
+* Node.js & NPM
+* MySQL/MariaDB
 
-#### 1. Clone Repository
-```bash
-git clone https://github.com/username/edukasi-bencana.git
-cd edukasi-bencana
-````
-
-#### 2. Install Dependency
+### 2. Langkah Instalasi
 
 ```bash
+# Clone repository
+git clone [https://github.com/username/siagabencana.git](https://github.com/username/siagabencana.git)
+cd siagabencana
+
+# Install dependencies
 composer install
-```
+npm install && npm run build
 
-#### 3. Setup Environment
-
-```bash
+# Setup .env
 cp .env.example .env
-```
-
-Edit `.env`:
-
-```env
-DB_CONNECTION=mysql
-DB_HOST=127.0.0.1
-DB_PORT=3306
-DB_DATABASE=edukasi_bencana
-DB_USERNAME=root
-DB_PASSWORD=
-```
-
-#### 4. Generate Key & Storage
-
-```bash
 php artisan key:generate
-php artisan storage:link
+
 ```
 
-#### 5. Migrasi & Seeder
+### 3. Database & Storage
 
 ```bash
+# Buat database 'edukasi_bencana' di MySQL Anda
+# Jalankan migrasi dan data awal
 php artisan migrate:fresh --seed
-```
 
-#### 6. Jalankan Server
+# Hubungkan storage untuk thumbnail topik
+php artisan storage:link
 
-```bash
-php artisan serve
-```
-
-Akses:
-
-```
-http://127.0.0.1:8000
 ```
 
 ---
 
-## 🔐 Akun Admin Default
+## 🔐 Kredensial Akses
 
-| Field    | Value                                     |
-| -------- | ----------------------------------------- |
-| URL      | /login                                    |
-| Email    | [admin@gmail.com](mailto:admin@gmail.com) |
-| Password | password                                  |
-
-> ⚠️ WAJIB ganti password setelah deploy production.
+| Akun | Email | Password | Role |
+| --- | --- | --- | --- |
+| **Super Admin** | `admin@gmail.com` | `password` | Administrator |
+| **User Demo** | `user@gmail.com` | `password` | Reguler User |
 
 ---
 
 ## 🗺️ Roadmap
 
-* [x] Setup Laravel Core
-* [x] Authentication System
-* [ ] Admin Panel CRUD Konten
-* [ ] Landing Page Publik
-* [ ] YouTube-Style UI
-* [ ] Mobile Optimization
-* [ ] PWA Support (Offline Access)
-* [ ] Multi-language (ID/EN)
+* [x] **Phase 1:** Core Arch & Database modularity.
+* [x] **Phase 2:** Admin Studio (YouTube-style uploader).
+* [ ] **Phase 3:** User Interest Picker (3 Zones).
+* [ ] **Phase 4:** Search Engine & Real-time Filtering.
+* [ ] **Phase 5:** PWA & Offline Materi Support.
 
 ---
 
-## 🧪 Testing & Quality
+## ⚖️ Lisensi & Kontribusi
 
-Rencana:
+Proyek ini dilisensikan di bawah **MIT License**. Kami sangat terbuka untuk kontribusi terutama pada konten edukasi dan optimasi performa di area minim sinyal.
 
-* Feature Test Laravel
-* Manual UAT
-* Mobile device testing
-* Low bandwidth simulation
-
----
-
-## 🤝 Kontribusi
-
-Workflow kontribusi:
-
-1. Fork repository
-2. Buat branch fitur
-3. Commit perubahan
-4. Push ke repo
-5. Ajukan Pull Request
-
----
-
-## ⚖️ Lisensi
-
-MIT License — bebas digunakan untuk kepentingan sosial & edukasi.
-
----
-
-## ❤️ Penutup
-
-SiagaBencana dibangun untuk membantu Indonesia:
-
-* Lebih siap
-* Lebih tanggap
-* Lebih cepat pulih dari bencana
-
-> **Technology for Humanity.**
+**Technology for Humanity.** Dibuat dengan ❤️ untuk Indonesia yang lebih tangguh.
 
