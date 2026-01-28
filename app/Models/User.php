@@ -21,6 +21,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role', // Added: Penting agar seeder dan registrasi bisa set role
     ];
 
     /**
@@ -44,5 +45,14 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    /**
+     * Helper untuk cek role user dengan mudah.
+     * Contoh penggunaan: if ($user->isAdmin()) { ... }
+     */
+    public function isAdmin(): bool
+    {
+        return $this->role === 'admin';
     }
 }
