@@ -5,41 +5,41 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>{{ config('app.name', 'SiagaBencana Admin') }}</title>
+        <title>{{ config('app.name', 'SiagaBencana Aceh') }}</title>
 
         <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=figtree:400,500,600,700&display=swap" rel="stylesheet" />
+        <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
-    <body class="font-sans antialiased bg-gray-50 text-gray-900">
-        <div class="min-h-screen flex overflow-hidden">
-            @include('layouts.navigation')
+    <body class="font-sans antialiased bg-gray-50">
+        <div class="flex min-h-screen overflow-hidden">
+            <aside class="w-64 bg-slate-900 text-white flex-shrink-0 sticky top-0 h-screen overflow-y-auto z-20 shadow-xl">
+                @include('layouts.navigation')
+            </aside>
 
-            <div class="flex-1 flex flex-col min-w-0 overflow-hidden">
-                <header class="bg-white border-b border-gray-200 z-10">
-                    <div class="px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
-                        <div class="flex items-center">
-                            <button @click="open = ! open" class="md:hidden p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none transition">
-                                <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
-                                    <path :class="{'hidden': open, 'inline-flex': ! open }" class="inline-flex" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-                                </svg>
-                            </button>
-                            <h2 class="ml-4 md:ml-0 font-bold text-xl text-gray-800 leading-tight">
-                                {{ $header ?? 'Admin Panel' }}
-                            </h2>
-                        </div>
-
-                        <div class="flex items-center gap-4">
-                            <span class="hidden sm:inline text-sm font-medium text-gray-500">{{ Auth::user()->name }}</span>
-                            <div class="w-8 h-8 rounded-full bg-red-600 flex items-center justify-center text-white font-bold text-xs shadow-sm">
-                                {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
+            <div class="flex-1 flex flex-col h-screen overflow-y-auto overflow-x-hidden">
+                @isset($header)
+                    <header class="bg-white border-b border-gray-200 sticky top-0 z-10 shadow-sm">
+                        <div class="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8 flex justify-between items-center">
+                            <div class="text-sm font-medium text-slate-500 uppercase tracking-wider">
+                                {{ __('Admin Panel') }}
+                            </div>
+                            <div class="flex items-center space-x-4">
+                                {{ $header }}
                             </div>
                         </div>
-                    </div>
-                </header>
+                    </header>
+                @endisset
 
-                <main class="flex-1 relative overflow-y-auto focus:outline-none p-6 md:p-8">
+                <main class="p-6 lg:p-10">
+                    <div class="mb-8">
+                        <h1 class="text-xs font-bold text-blue-600 uppercase tracking-widest mb-1">Project Platform</h1>
+                        <p class="text-lg font-semibold text-slate-800 leading-tight">
+                            Pengembangan Platform Literasi Digital Berbasis Budaya Lokal untuk Mitigasi Bencana Banjir di Aceh
+                        </p>
+                    </div>
+
                     {{ $slot }}
                 </main>
             </div>
