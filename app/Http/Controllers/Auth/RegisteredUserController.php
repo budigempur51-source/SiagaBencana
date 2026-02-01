@@ -24,8 +24,6 @@ class RegisteredUserController extends Controller
 
     /**
      * Handle an incoming registration request.
-     *
-     * @throws \Illuminate\Validation\ValidationException
      */
     public function store(Request $request): RedirectResponse
     {
@@ -35,16 +33,26 @@ class RegisteredUserController extends Controller
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
+        // Default role 'user' sudah dihandle database/migration, 
+        // tapi kita pastikan create user standar.
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'role' => 'user', // Explicitly set as user
         ]);
 
         event(new Registered($user));
 
         Auth::login($user);
 
-        return redirect(route('dashboard', absolute: false));
+        // LOGIC REDIRECT PINTAR
+        // Jika yang daftar entah kenapa jadi Admin, ke Dashboard.
+        // Jika User biasa (99% kasus), ke Ruang Belajar.
+        if ($user->role === 'admin') {
+            return redirect(route('dashboard', absolute: false));
+        }
+
+        return redirect(route('user.selection', absolute: false));
     }
 }

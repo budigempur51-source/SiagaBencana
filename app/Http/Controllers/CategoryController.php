@@ -4,50 +4,21 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
 
 class CategoryController extends Controller
 {
     /**
-     * Tampilkan daftar kategori.
+     * Menampilkan daftar kategori.
      */
     public function index()
     {
-        $categories = Category::latest()->get();
+        $categories = Category::all();
         return view('categories.index', compact('categories'));
     }
 
     /**
-     * Form tambah kategori.
-     */
-    public function create()
-    {
-        return view('categories.create');
-    }
-
-    /**
-     * Simpan kategori baru ke database.
-     */
-    public function store(Request $request)
-    {
-        $request->validate([
-            'name' => 'required|string|max:255|unique:categories,name',
-            'color' => 'required|string|max:7',
-            'description' => 'nullable|string',
-        ]);
-
-        Category::create([
-            'name' => $request->name,
-            'slug' => Str::slug($request->name),
-            'color' => $request->color,
-            'description' => $request->description,
-        ]);
-
-        return redirect()->route('categories.index')->with('success', 'Kategori berhasil ditambahkan!');
-    }
-
-    /**
-     * Form edit kategori.
+     * Menampilkan form edit kategori.
+     * Kita izinkan edit barangkali admin ingin merubah deskripsi atau memperbaiki typo nama.
      */
     public function edit(Category $category)
     {
@@ -59,28 +30,21 @@ class CategoryController extends Controller
      */
     public function update(Request $request, Category $category)
     {
-        $request->validate([
-            'name' => 'required|string|max:255|unique:categories,name,' . $category->id,
-            'color' => 'required|string|max:7',
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
             'description' => 'nullable|string',
         ]);
 
-        $category->update([
-            'name' => $request->name,
-            'slug' => Str::slug($request->name),
-            'color' => $request->color,
-            'description' => $request->description,
-        ]);
+        // Update slug otomatis dari nama baru jika nama berubah
+        // $validated['slug'] = Str::slug($validated['name']); 
+        // Note: Biasanya slug kategori inti sebaiknya tidak diubah agar link SEO tidak putus, 
+        // tapi jika request name berubah, kita update saja standard.
 
-        return redirect()->route('categories.index')->with('success', 'Kategori berhasil diperbarui!');
+        $category->update($validated);
+
+        return redirect()->route('categories.index')->with('success', 'Kategori berhasil diperbarui.');
     }
 
-    /**
-     * Hapus kategori.
-     */
-    public function destroy(Category $category)
-    {
-        $category->delete();
-        return redirect()->route('categories.index')->with('success', 'Kategori berhasil dihapus!');
-    }
+    // --- RESTRICTED METHODS (DIHAPUS/DILARANG) ---
+    // create(), store(), destroy() dihapus untuk mencegah penambahan/penghapusan kategori.
 }

@@ -3,7 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\User;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Category;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
@@ -14,19 +14,34 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // Membuat Akun Admin Utama secara otomatis
-        // Akun ini akan selalu ada setiap kali Anda menjalankan migrate:fresh --seed
-        User::updateOrCreate(
-            ['email' => 'admin@gmail.com'], // Cek berdasarkan email agar tidak duplikat
+        // 1. Setup User Admin (Jika belum ada)
+        User::firstOrCreate(
+            ['email' => 'admin@siagabencana.com'],
             [
-                'name' => 'Admin SiagaBencana',
-                'password' => Hash::make('password'), // Silakan ganti password di sini
+                'name' => 'Admin Siaga Bencana',
+                'password' => Hash::make('password'),
                 'role' => 'admin',
                 'email_verified_at' => now(),
             ]
         );
 
-        // Anda bisa menambahkan seeding kategori atau topik di sini nanti
-        $this->command->info('Akun Admin berhasil dibuat: admin@gmail.com | password: password');
+        // 2. Setup Kategori TERKUNCI (Hanya 3 ini)
+        // Kita gunakan firstOrCreate agar tidak duplikat saat di-seed ulang
+        Category::firstOrCreate(
+            ['slug' => 'anak-anak'], 
+            ['name' => 'Anak-anak', 'description' => 'Edukasi bencana yang ramah untuk anak.']
+        );
+
+        Category::firstOrCreate(
+            ['slug' => 'umkm'], 
+            ['name' => 'UMKM', 'description' => 'Panduan ketahanan bencana untuk pelaku usaha.']
+        );
+
+        Category::firstOrCreate(
+            ['slug' => 'kesehatan'], 
+            ['name' => 'Kesehatan', 'description' => 'Informasi medis dan pertolongan pertama.']
+        );
+
+        // Opsional: Tambahkan topik default jika perlu nanti
     }
 }

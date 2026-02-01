@@ -8,31 +8,33 @@ return new class extends Migration
 {
     /**
      * Run the migrations.
-     * Konsolidasi: Membuat tabel videos dengan dukungan upload fisik dan YouTube.
      */
     public function up(): void
     {
         Schema::create('videos', function (Blueprint $table) {
             $table->id();
-            // Relasi ke Topik (Anak-anak, UMKM, Kesehatan akan masuk lewat relasi ini)
+            // Relasi ke Topik
             $table->foreignId('topic_id')->constrained('topics')->cascadeOnDelete();
             
             $table->string('title');
             $table->string('slug')->unique();
             
-            // Media Source: Bisa YouTube ID atau File Fisik (Self-hosted)
+            // Media Source
             $table->string('youtube_id')->nullable(); 
-            $table->string('video_file')->nullable(); // Untuk upload maksimal 1GB
-            $table->string('thumbnail')->nullable(); // Thumbnail kustom
+            $table->string('video_file')->nullable(); // File path
+            $table->string('thumbnail')->nullable();
             
             // Metadata Konten
             $table->integer('duration')->default(0); // Durasi dalam menit
             $table->enum('level', ['pemula', 'menengah', 'lanjut'])->default('pemula');
             
+            // FITUR BARU: Penanda Video Short (Vertical / < 60s)
+            $table->boolean('is_short')->default(false);
+
             // Informasi Deskriptif
-            $table->text('summary')->nullable(); // Ringkasan pendek
-            $table->longText('description')->nullable(); // Deskripsi lengkap/materi
-            $table->string('tags')->nullable(); // Hashtags/Tags
+            $table->text('summary')->nullable();
+            $table->longText('description')->nullable();
+            $table->string('tags')->nullable();
             
             // Management
             $table->boolean('is_featured')->default(false);

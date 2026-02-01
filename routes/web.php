@@ -8,11 +8,19 @@ use App\Http\Controllers\LearningModuleController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\UserContentController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Auth\SocialAuthController;
+
+Route::get('/auth/{provider}', [SocialAuthController::class, 'redirect'])->name('social.redirect');
+Route::get('/auth/{provider}/callback', [SocialAuthController::class, 'callback'])->name('social.callback');
 
 // --- GROUP 1: PUBLIC ROUTES ---
 Route::get('/', function () {
     return view('welcome');
 })->name('home');
+
+
+
+
 
 // --- GROUP 2: AUTHENTICATED USER ROUTES ---
 Route::middleware(['auth', 'verified'])->group(function () {

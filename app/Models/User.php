@@ -9,25 +9,27 @@ use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
 
     /**
      * The attributes that are mass assignable.
      *
-     * @var list<string>
+     * @var array<int, string>
      */
     protected $fillable = [
         'name',
         'email',
         'password',
-        'role', // Added: Penting agar seeder dan registrasi bisa set role
+        'role',          // Role custom kita
+        'google_id',     // Social Login
+        'facebook_id',   // Social Login
+        'avatar',        // Social Login
     ];
 
     /**
      * The attributes that should be hidden for serialization.
      *
-     * @var list<string>
+     * @var array<int, string>
      */
     protected $hidden = [
         'password',
@@ -45,14 +47,5 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
-    }
-
-    /**
-     * Helper untuk cek role user dengan mudah.
-     * Contoh penggunaan: if ($user->isAdmin()) { ... }
-     */
-    public function isAdmin(): bool
-    {
-        return $this->role === 'admin';
     }
 }
