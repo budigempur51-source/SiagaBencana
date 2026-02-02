@@ -1,134 +1,240 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="scroll-smooth">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>SiagaBencana Aceh - Literasi Digital Mitigasi Banjir</title>
 
     <link rel="preconnect" href="https://fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=figtree:400,600,800&display=swap" rel="stylesheet" />
+    <link href="https://fonts.bunny.net/css?family=figtree:300,400,600,800,900&display=swap" rel="stylesheet" />
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-</head>
-<body class="antialiased bg-white text-slate-900 font-sans">
     
-    <nav class="fixed w-full z-50 bg-white/80 backdrop-blur-md border-b border-slate-100">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-20 items-center">
-                <div class="flex items-center space-x-3">
-                    <img src="{{ asset('avatar/logoweb.png') }}" alt="Logo SiagaBencana" class="h-12 w-auto">
-                    <div class="hidden sm:block">
-                        <span class="block text-lg font-black leading-none text-slate-800 uppercase tracking-tighter">SiagaBencana</span>
-                        <span class="text-[10px] font-bold text-emerald-600 uppercase tracking-widest">Aceh Digilitera</span>
+    <style>
+        body { font-family: 'Figtree', sans-serif; letter-spacing: -0.01em; }
+
+        /* Kaca Ultra Clean */
+        .glass-premium {
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        /* Tombol Hijau Clean & Glow */
+        .btn-emerald-clean {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            box-shadow: 0 10px 25px -5px rgba(16, 185, 129, 0.4), inset 0 1px 1px rgba(255,255,255,0.2);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .btn-emerald-clean:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px -5px rgba(16, 185, 129, 0.6);
+            filter: brightness(1.1);
+        }
+
+        /* Tulisan Anti-Kabur & Super Bold */
+        .hero-title {
+            font-size: clamp(3rem, 8vw, 7.5rem);
+            line-height: 0.85;
+            letter-spacing: -0.05em;
+            font-weight: 900;
+            text-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .text-sharp-light {
+            text-shadow: 0 2px 10px rgba(0,0,0,0.8);
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Video Background Master Overlay */
+        .vignette-master {
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 20% 50%, rgba(2,6,23,0.4) 0%, rgba(2,6,23,0.9) 100%);
+            z-index: 2;
+        }
+
+        /* Slider Animation */
+        .slide-item {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: all 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: translateX(50px) scale(0.9);
+        }
+
+        .slide-active {
+            opacity: 1;
+            transform: translateX(0) scale(1);
+            z-index: 10;
+        }
+    </style>
+</head>
+<body class="antialiased bg-slate-950 text-white overflow-x-hidden">
+    
+    <nav class="fixed w-full z-50 transition-all duration-500 py-6" id="mainNav">
+        <div class="max-w-7xl mx-auto px-6 lg:px-10">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center space-x-6">
+                    <img src="{{ asset('avatar/logoweb.png') }}" alt="Logo" class="h-20 w-auto drop-shadow-[0_0_20px_rgba(16,185,129,0.3)]">
+                    <div class="hidden sm:block border-l border-white/20 pl-6">
+                        <h2 class="text-2xl font-black uppercase tracking-tighter text-sharp-light">SiagaBencana</h2>
+                        <p class="text-[9px] font-bold text-emerald-400 uppercase tracking-[0.5em] text-sharp-light">Aceh Digilitera</p>
                     </div>
                 </div>
 
-                <div class="flex items-center space-x-4">
-                    @if (Route::has('login'))
-                        @auth
-                            <a href="{{ route('dashboard') }}" class="text-sm font-bold text-slate-600 hover:text-blue-600 transition">Dashboard Admin</a>
-                        @else
-                            <a href="{{ route('login') }}" class="text-sm font-bold text-slate-600 hover:text-blue-600 transition">Masuk</a>
-                            @if (Route::has('register'))
-                                <a href="{{ route('register') }}" class="px-5 py-2.5 bg-slate-900 text-white text-sm font-bold rounded-full hover:bg-slate-800 transition">Daftar Akun</a>
-                            @endif
-                        @endauth
-                    @endif
+                <div class="flex items-center space-x-8">
+                    @auth
+                        <a href="{{ route('dashboard') }}" class="text-sm font-bold text-white/80 hover:text-emerald-400 transition text-sharp-light">Dashboard</a>
+                    @else
+                        <a href="{{ route('login') }}" class="text-sm font-bold text-white/80 hover:text-white transition text-sharp-light">Masuk</a>
+                        <a href="{{ route('register') }}" class="btn-emerald-clean px-8 py-3.5 text-white text-sm font-black rounded-full">
+                            Daftar Sekarang
+                        </a>
+                    @endauth
                 </div>
             </div>
         </div>
     </nav>
 
-    <section class="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-            <div class="max-w-3xl">
-                <div class="inline-flex items-center px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 text-xs font-bold mb-6 border border-emerald-100 uppercase tracking-wider">
-                    <span class="flex h-2 w-2 rounded-full bg-emerald-500 mr-2 animate-pulse"></span>
-                    Program Mahasiswa Berdampak Aceh
-                </div>
-                <h1 class="text-5xl lg:text-7xl font-black text-slate-900 leading-[1.1] mb-8">
-                    Budaya Lokal, <br>
-                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-emerald-500">Literasi Digital,</span> <br>
-                    Aceh Siaga Banjir.
-                </h1>
-                <p class="text-lg text-slate-500 leading-relaxed mb-10 max-w-xl">
-                    Platform edukasi mitigasi bencana banjir berbasis kearifan lokal. Lindungi keluarga dan masyarakat Aceh melalui pemahaman teknologi digital yang tepat guna.
-                </p>
+    <section class="relative h-screen w-full flex items-center overflow-hidden">
+        <div class="absolute inset-0 z-0">
+            <div class="vignette-master"></div>
+            <video autoplay muted loop playsinline class="w-full h-full object-cover">
+                <source src="{{ asset('videos/hero-bg.mp4') }}" type="video/mp4">
+            </video>
+        </div>
+
+        <div class="max-w-7xl mx-auto px-6 lg:px-10 relative z-10 w-full pt-12">
+            <div class="grid lg:grid-cols-2 gap-12 items-center">
                 
-                <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
-                    @auth
-                        <a href="{{ route('user.selection') }}" class="inline-flex items-center justify-center px-8 py-4 bg-blue-600 text-white text-lg font-extrabold rounded-2xl shadow-xl shadow-blue-200 hover:bg-blue-700 hover:-translate-y-1 transition-all duration-300">
-                            Yok Belajar Sekarang!
-                            <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+                <div class="text-left">
+                    <div class="inline-flex items-center space-x-3 px-4 py-1.5 rounded-full glass-premium border-white/10 text-emerald-400 text-[10px] font-black uppercase tracking-[0.4em] mb-10">
+                        <span class="h-2 w-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                        <span>Literasi Digital Aceh</span>
+                    </div>
+                    
+                    <h1 class="hero-title text-white mb-10">
+                        Budaya<br>
+                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400">Siaga.</span>
+                    </h1>
+                    
+                    <p class="text-xl lg:text-2xl text-slate-200/90 leading-relaxed mb-12 max-w-lg font-medium text-sharp-light">
+                        Membangun ketangguhan masyarakat Aceh melalui <span class="text-white font-bold italic">Edukasi Digital</span> berbasis kearifan lokal yang presisi.
+                    </p>
+                    
+                    <div class="flex flex-wrap gap-6">
+                        <a href="{{ route('login') }}" class="btn-emerald-clean px-12 py-5 text-white text-lg font-black rounded-2xl">
+                            Mulai Belajar
                         </a>
-                    @else
-                        <a href="{{ route('login') }}" class="inline-flex items-center justify-center px-8 py-4 bg-blue-600 text-white text-lg font-extrabold rounded-2xl shadow-xl shadow-blue-200 hover:bg-blue-700 hover:-translate-y-1 transition-all duration-300">
-                            Yok Belajar Sekarang!
-                            <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+                        <a href="#tentang" class="glass-premium px-12 py-5 text-white text-lg font-bold rounded-2xl hover:bg-white/5 transition-all">
+                            Pelajari Program
                         </a>
-                    @endauth
-                    <a href="#tentang" class="inline-flex items-center justify-center px-8 py-4 bg-white text-slate-700 text-lg font-bold rounded-2xl border border-slate-200 hover:bg-slate-50 transition-all">
-                        Pelajari Program
-                    </a>
-                </div>
-            </div>
-        </div>
-        
-        <div class="absolute top-0 right-0 -mr-20 -mt-20 w-1/2 h-full opacity-10 pointer-events-none">
-            <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-                <path fill="#3B82F6" d="M44.7,-76.4C58.8,-69.2,71.8,-59.1,79.6,-46.1C87.4,-33.1,90,-16.5,87.7,-0.7C85.4,15.2,78.1,30.3,68.8,43.4C59.5,56.5,48.2,67.6,34.8,73.5C21.4,79.4,5.9,80.1,-10.1,77.3C-26.1,74.5,-42.6,68.3,-56.3,58.3C-70,48.3,-80.9,34.5,-85.4,19.1C-89.9,3.7,-88,-13.4,-81.4,-28.3C-74.8,-43.2,-63.5,-55.9,-50.3,-63.5C-37.1,-71.1,-22,-73.6,-6.6,-72.5C8.8,-71.3,21.6,-76.6,30.6,-83.6C39.6,-90.6,44.7,-99.3,44.7,-76.4Z" transform="translate(100 100)" />
-            </svg>
-        </div>
-    </section>
-
-    <section id="tentang" class="py-24 bg-slate-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-20">
-                <h2 class="text-3xl font-black text-slate-900 mb-4">Tiga Fokus Literasi Digital</h2>
-                <p class="text-slate-500 max-w-2xl mx-auto">Kami menyajikan materi yang tersegmentasi untuk menjamin pemahaman yang relevan bagi setiap lapisan masyarakat Aceh.</p>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div class="bg-white p-10 rounded-[40px] shadow-sm border border-slate-100 hover:shadow-xl hover:-translate-y-2 transition-all duration-300">
-                    <div class="w-16 h-16 bg-blue-100 text-blue-600 rounded-3xl flex items-center justify-center mb-8">
-                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                     </div>
-                    <h3 class="text-2xl font-black text-slate-900 mb-4 text-left">Anak-Anak</h3>
-                    <p class="text-slate-500 leading-relaxed text-left text-sm">
-                        Edukasi visual dan cerita interaktif untuk mengenalkan tanda-tanda banjir sejak dini melalui perangkat digital.
-                    </p>
                 </div>
 
-                <div class="bg-white p-10 rounded-[40px] shadow-sm border border-slate-100 hover:shadow-xl hover:-translate-y-2 transition-all duration-300">
-                    <div class="w-16 h-16 bg-orange-100 text-orange-600 rounded-3xl flex items-center justify-center mb-8">
-                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+                <div class="hidden lg:block relative h-[700px] w-full pointer-events-none">
+                    <div class="slide-item slide-active">
+                        <img src="{{ asset('avatar/slide1.png') }}" class="max-h-full w-auto object-contain drop-shadow-[0_40px_70px_rgba(0,0,0,0.7)]">
                     </div>
-                    <h3 class="text-2xl font-black text-slate-900 mb-4 text-left">UMKM Aceh</h3>
-                    <p class="text-slate-500 leading-relaxed text-left text-sm">
-                        Strategi penyelamatan aset bisnis dan pemanfaatan platform digital untuk menjaga keberlanjutan usaha saat terjadi bencana.
-                    </p>
-                </div>
-
-                <div class="bg-white p-10 rounded-[40px] shadow-sm border border-slate-100 hover:shadow-xl hover:-translate-y-2 transition-all duration-300">
-                    <div class="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-3xl flex items-center justify-center mb-8">
-                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+                    <div class="slide-item">
+                        <img src="{{ asset('avatar/slide2.png') }}" class="max-h-full w-auto object-contain drop-shadow-[0_40px_70px_rgba(0,0,0,0.7)]">
                     </div>
-                    <h3 class="text-2xl font-black text-slate-900 mb-4 text-left">Relawan Kesehatan</h3>
-                    <p class="text-slate-500 leading-relaxed text-left text-sm">
-                        Manajemen data korban dan pelaporan kesehatan berbasis aplikasi untuk respon cepat tanggap darurat banjir.
-                    </p>
+                    <div class="slide-item">
+                        <img src="{{ asset('avatar/slide3.png') }}" class="max-h-full w-auto object-contain drop-shadow-[0_40px_70px_rgba(0,0,0,0.7)]">
+                    </div>
+                    <div class="slide-item">
+                        <img src="{{ asset('avatar/slide4.png') }}" class="max-h-full w-auto object-contain drop-shadow-[0_40px_70px_rgba(0,0,0,0.7)]">
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <footer class="py-12 bg-white border-t border-slate-100 text-center">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <img src="{{ asset('avatar/logoweb.png') }}" alt="Logo Footer" class="h-10 w-auto mx-auto mb-6 grayscale opacity-50">
-            <p class="text-sm text-slate-400 font-medium tracking-wide">
-                &copy; {{ date('Y') }} {{ config('app.name') }}. Pengembangan Platform Literasi Digital Berbasis Budaya Lokal.
+    <section id="tentang" class="py-32 bg-white text-slate-950 relative z-30">
+        <div class="max-w-7xl mx-auto px-6 lg:px-10">
+            <div class="flex flex-col lg:flex-row justify-between items-end mb-24 gap-8">
+                <div class="max-w-3xl">
+                    <h2 class="text-5xl lg:text-7xl font-black tracking-tighter leading-[0.9] mb-8 uppercase">
+                        Fokus Utama<br><span class="text-emerald-600">Literasi Kami.</span>
+                    </h2>
+                    <p class="text-2xl text-slate-500 font-light max-w-xl">Strategi tepat sasaran untuk mewujudkan Aceh yang lebih tangguh menghadapi bencana.</p>
+                </div>
+                <div class="h-2 w-32 bg-emerald-500 rounded-full mb-4"></div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+                <div class="p-12 rounded-[3.5rem] bg-slate-50 border border-slate-100 hover:shadow-2xl hover:shadow-emerald-500/10 transition-all duration-500 group">
+                    <div class="w-20 h-20 bg-emerald-500 text-white rounded-3xl flex items-center justify-center mb-10 shadow-lg shadow-emerald-500/30 group-hover:rotate-6 transition-transform">
+                        <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+                    </div>
+                    <h3 class="text-3xl font-black mb-6 tracking-tight">Edukasi Digital</h3>
+                    <p class="text-lg text-slate-500 leading-relaxed">Modul pembelajaran berbasis video dan interaksi untuk semua usia.</p>
+                </div>
+
+                <div class="p-12 rounded-[3.5rem] bg-slate-50 border border-slate-100 hover:shadow-2xl hover:shadow-blue-500/10 transition-all duration-500 group">
+                    <div class="w-20 h-20 bg-blue-600 text-white rounded-3xl flex items-center justify-center mb-10 shadow-lg shadow-blue-500/30 group-hover:rotate-6 transition-transform">
+                        <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                    </div>
+                    <h3 class="text-3xl font-black mb-6 tracking-tight">Aset Lokal</h3>
+                    <p class="text-lg text-slate-500 leading-relaxed">Penyelamatan aset budaya dan ekonomi berbasis platform digital.</p>
+                </div>
+
+                <div class="p-12 rounded-[3.5rem] bg-slate-50 border border-slate-100 hover:shadow-2xl hover:shadow-rose-500/10 transition-all duration-500 group">
+                    <div class="w-20 h-20 bg-rose-600 text-white rounded-3xl flex items-center justify-center mb-10 shadow-lg shadow-rose-500/30 group-hover:rotate-6 transition-transform">
+                        <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                    </div>
+                    <h3 class="text-3xl font-black mb-6 tracking-tight">Cepat Tanggap</h3>
+                    <p class="text-lg text-slate-500 leading-relaxed">Integrasi data relawan real-time untuk koordinasi lapangan yang efisien.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="py-24 bg-white border-t border-slate-100 text-center">
+        <div class="max-w-7xl mx-auto px-6">
+            <img src="{{ asset('avatar/logoweb.png') }}" alt="Logo" class="h-16 w-auto mx-auto mb-10 grayscale opacity-30 hover:opacity-100 transition-all duration-700">
+            <div class="flex justify-center space-x-10 mb-10 text-sm font-bold text-slate-400 uppercase tracking-widest">
+                <a href="#" class="hover:text-emerald-500 transition">Beranda</a>
+                <a href="#" class="hover:text-emerald-500 transition">Tentang</a>
+                <a href="#" class="hover:text-emerald-500 transition">Kontak</a>
+            </div>
+            <p class="text-slate-400 text-xs font-bold uppercase tracking-[0.3em]">
+                &copy; {{ date('Y') }} {{ config('app.name') }}. Program Mahasiswa Berdampak Aceh.
             </p>
         </div>
     </footer>
+
+    <script>
+        // Navbar Scroll Styling
+        const nav = document.getElementById('mainNav');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 80) {
+                nav.classList.add('glass-premium', 'py-4', 'shadow-2xl');
+                nav.classList.remove('py-6');
+            } else {
+                nav.classList.remove('glass-premium', 'py-4', 'shadow-2xl');
+                nav.classList.add('py-6');
+            }
+        });
+
+        // Precision Image Slider
+        let current = 0;
+        const items = document.querySelectorAll('.slide-item');
+        
+        function rotate() {
+            items[current].classList.remove('slide-active');
+            current = (current + 1) % items.length;
+            items[current].classList.add('slide-active');
+        }
+
+        setInterval(rotate, 5000); // Ganti setiap 5 detik agar tidak terlalu cepat
+    </script>
 </body>
 </html>

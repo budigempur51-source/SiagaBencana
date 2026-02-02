@@ -18,16 +18,17 @@ Route::get('/', function () {
     return view('welcome');
 })->name('home');
 
-
-
-
-
 // --- GROUP 2: AUTHENTICATED USER ROUTES ---
 Route::middleware(['auth', 'verified'])->group(function () {
     
     // Alur Belajar Pengguna
     Route::get('/belajar', [UserContentController::class, 'selection'])->name('user.selection');
+    
+    // Hub Materi (List Video & Modul)
     Route::get('/belajar/{category:slug}', [UserContentController::class, 'index'])->name('user.hub');
+
+    // FITUR BARU: BACA MODUL (Book View)
+    Route::get('/belajar/modul/{module:slug}/baca', [UserContentController::class, 'read'])->name('user.module.read');
 
     // Profile Settings
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

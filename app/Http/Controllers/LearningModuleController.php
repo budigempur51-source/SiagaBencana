@@ -33,10 +33,12 @@ class LearningModuleController extends Controller
      */
     public function store(Request $request)
     {
+        // PENTING: Untuk fitur "Buku Digital", kita batasi hanya PDF.
+        // File Word/PPT tidak bisa dirender browser native sebagai buku.
         $validated = $request->validate([
             'topic_id'    => 'required|exists:topics,id',
             'title'       => 'required|string|max:255',
-            'file'        => 'required|file|mimes:pdf,doc,docx,ppt,pptx|max:10240', // Max 10MB
+            'file'        => 'required|file|mimes:pdf|max:20480', // Hanya PDF, Max 20MB
             'description' => 'nullable|string',
             'is_featured' => 'boolean',
         ]);
@@ -46,17 +48,17 @@ class LearningModuleController extends Controller
             $path = $file->store('learning-modules', 'public');
             
             $validated['file_path'] = $path;
-            $validated['file_type'] = $file->getClientOriginalExtension();
+            $validated['file_type'] = $file->getClientOriginalExtension(); // Pasti 'pdf'
             $validated['file_size'] = $file->getSize();
         }
 
-        $validated['slug'] = Str::slug($request->title);
+        $validated['slug'] = Str::slug($request->title) . '-' . Str::random(5); // Tambah random string biar slug unik
         $validated['summary'] = Str::limit($request->description, 150);
         $validated['is_featured'] = $request->has('is_featured');
 
         LearningModule::create($validated);
 
-        return redirect()->route('modules.index')->with('success', 'Modul pembelajaran berhasil diunggah!');
+        return redirect()->route('modules.index')->with('success', 'Modul PDF berhasil diunggah dan siap dibaca!');
     }
 
     /**
@@ -76,13 +78,12 @@ class LearningModuleController extends Controller
         $validated = $request->validate([
             'topic_id'    => 'required|exists:topics,id',
             'title'       => 'required|string|max:255',
-            'file'        => 'nullable|file|mimes:pdf,doc,docx,ppt,pptx|max:10240',
+            'file'        => 'nullable|file|mimes:pdf|max:20480', // Hanya PDF
             'description' => 'nullable|string',
             'is_featured' => 'boolean',
         ]);
 
         if ($request->hasFile('file')) {
-            // Hapus file lama jika ada upload file baru
             if ($module->file_path) {
                 Storage::disk('public')->delete($module->file_path);
             }

@@ -6,30 +6,27 @@ use App\Models\Category;
 use App\Models\Video;
 use App\Models\LearningModule;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class UserContentController extends Controller
 {
     /**
      * Langkah 1: Portal Pemilihan Kategori.
-     * Tampilan harus clean dan mengundang klik.
      */
     public function selection()
     {
-        // Ambil kategori beserta jumlah kontennya untuk ditampilkan sebagai badge
         $categories = Category::withCount(['topics', 'videos'])->get();
         return view('user.selection', compact('categories'));
     }
 
     /**
      * Langkah 2: Hub Edukasi (Learning Hub).
-     * Disini user menghabiskan waktu.
      */
     public function index(Request $request, Category $category)
     {
         $search = $request->query('search');
 
-        // 1. QUERY VIDEO (Paginate 9 item per load)
-        // Kita gunakan Eager Loading (with topic) biar query ringan
+        // Query Video
         $videos = Video::whereHas('topic', function ($query) use ($category) {
             $query->where('category_id', $category->id);
         })
@@ -37,12 +34,12 @@ class UserContentController extends Controller
             $query->where('title', 'like', "%{$search}%")
                   ->orWhere('tags', 'like', "%{$search}%");
         })
-        ->with('topic') // Penting untuk performa
+        ->with('topic')
         ->latest()
         ->paginate(9)
-        ->withQueryString(); // Agar pagination tetap membawa parameter search
+        ->withQueryString();
 
-        // 2. QUERY MODUL (Paginate 6 item)
+        // Query Modul
         $modules = LearningModule::whereHas('topic', function ($query) use ($category) {
             $query->where('category_id', $category->id);
         })
@@ -51,9 +48,25 @@ class UserContentController extends Controller
         })
         ->with('topic')
         ->latest()
-        ->paginate(6, ['*'], 'modules_page') // Nama page beda biar gak konflik sama video
+        ->paginate(6, ['*'], 'modules_page')
         ->withQueryString();
 
         return view('user.index', compact('category', 'videos', 'modules', 'search'));
+    }
+
+    /**
+     * Langkah 3: Reader Modul (Tampilan Buku).
+     */
+    public function read(LearningModule $module)
+    {
+        // Pastikan file ada
+        if (!Storage::disk('public')->exists($module->file_path)) {
+            abort(404, 'File modul tidak ditemukan di server.');
+        }
+
+        // Kita ambil URL file
+        $fileUrl = Storage::url($module->file_path);
+
+        return view('user.read_module', compact('module', 'fileUrl'));
     }
 }
