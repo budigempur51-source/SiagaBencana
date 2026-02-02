@@ -16,6 +16,9 @@
     
     {{-- Alpine.js (Wajib untuk interaksi) --}}
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    
+    {{-- Stack Styles (Jika ada view yang butuh CSS khusus) --}}
+    @stack('styles')
 </head>
 <body class="font-sans antialiased bg-slate-50 text-slate-900">
     
@@ -98,5 +101,15 @@
             <p class="text-slate-400 text-sm">&copy; {{ date('Y') }} SiagaBencana Aceh. Platform Edukasi Digital.</p>
         </div>
     </footer>
+
+    {{-- 
+        ==================================================
+        CRITICAL FIX: STACK SCRIPTS
+        ==================================================
+        Ini wajib ada agar perintah @push('scripts') 
+        dari halaman lain bisa masuk ke sini.
+    --}}
+    @stack('scripts')
+
 </body>
 </html>
