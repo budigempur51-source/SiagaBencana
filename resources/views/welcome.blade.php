@@ -118,7 +118,7 @@
         <div class="absolute inset-0 z-0">
             <div class="vignette-master"></div>
             <video id="bgVideo" autoplay muted loop playsinline class="w-full h-full object-cover">
-                <source src="{{ asset('videos/hero-bg.mp4') }}" type="video/mp4">
+                <source src="{{ asset('storage_videos/hero-bg.mp4') }}" type="video/mp4">
             </video>
         </div>
 

@@ -21,12 +21,17 @@
                 {{-- Video Container (Cinema Style) --}}
                 <div class="w-full aspect-video bg-[#0a0a0a] rounded-3xl overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.5)] relative ring-1 ring-white/5">
                      <template x-if="modalOpen && videoType === 'youtube'">
-                        {{-- FIX: Menambahkan atribut 'allow' yang lengkap untuk memastikan kontrol player berfungsi --}}
+                        {{-- 
+                            FIX ERROR 153 & TRACKING PREVENTION:
+                            1. referrerpolicy="strict-origin-when-cross-origin" (WAJIB ADA)
+                            2. allow="...; web-share" (Fitur modern)
+                        --}}
                         <iframe class="w-full h-full absolute inset-0" 
                                 :src="videoSrc" 
                                 title="YouTube video player"
                                 frameborder="0" 
                                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                                referrerpolicy="strict-origin-when-cross-origin"
                                 allowfullscreen>
                         </iframe>
                     </template>
@@ -47,14 +52,15 @@
                     <div class="flex flex-wrap items-center gap-x-6 gap-y-3 mt-4 text-sm font-medium text-white/60">
                         <div class="flex items-center gap-2">
                              <div class="w-6 h-6 rounded-full bg-blue-600 flex items-center justify-center text-[10px] font-bold text-white">
-                                {{ substr($category->name, 0, 1) }}
+                                {{ substr($category->name ?? 'A', 0, 1) }}
                             </div>
                             <span x-text="videoAuthor" class="text-white/80"></span>
                         </div>
                         <span class="w-1 h-1 rounded-full bg-white/30"></span>
                         <span x-text="videoDate"></span>
                         <span class="w-1 h-1 rounded-full bg-white/30"></span>
-                        <span class="text-blue-400 font-bold tracking-wide uppercase text-xs">{{ $category->name }}</span>
+                        {{-- Handle jika category undefined di JS --}}
+                        <span class="text-blue-400 font-bold tracking-wide uppercase text-xs" x-text="videoAuthor"></span> 
                     </div>
 
                     {{-- Divider --}}
@@ -80,7 +86,6 @@
                         <div class="group flex gap-4 cursor-pointer p-3 rounded-2xl hover:bg-white/5 transition-all duration-300"
                              @click="openPlayer({
                                 type: '{{ $related->youtube_id ? 'youtube' : 'upload' }}', 
-                                {{-- FIX: Ganti asset() dengan route('video.stream') di sini juga --}}
                                 src: '{{ $related->youtube_id ? $related->youtube_id : route('video.stream', $related->id) }}', 
                                 title: {{ Js::from($related->title) }}, 
                                 desc: {{ Js::from($related->description) }},
