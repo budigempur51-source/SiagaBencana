@@ -5,9 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    {{-- FIX: Meta Tag Anti-Error 153 YouTube --}}
-    <meta name="referrer" content="strict-origin-when-cross-origin">
-
     <title>{{ config('app.name', 'SiagaBencana') }} - Ruang Belajar</title>
 
     {{-- Fonts --}}
@@ -19,6 +16,9 @@
     
     {{-- Alpine.js (Wajib untuk interaksi) --}}
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    
+    {{-- Stack Styles --}}
+    @stack('styles')
 </head>
 <body class="font-sans antialiased bg-slate-50 text-slate-900">
     
@@ -26,15 +26,24 @@
     <nav class="bg-white/80 backdrop-blur-md border-b border-slate-100 fixed w-full z-50 transition-all duration-300">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16">
-                {{-- Logo & Brand --}}
+                
+                {{-- 1. LOGO & BRAND (LINK HILANG TOTAL) --}}
                 <div class="flex items-center gap-3">
-                    <a href="{{ route('home') }}" class="flex-shrink-0 flex items-center gap-2">
+                    {{-- 
+                        FIX:
+                        - Ganti <a> jadi <div>
+                        - Hapus href
+                        - Tambah 'cursor-default select-none' biar gak bisa diklik/diblok
+                    --}}
+                    <div class="flex-shrink-0 flex items-center gap-2 cursor-default select-none">
                         <img src="{{ asset('avatar/logoweb.png') }}" class="block h-9 w-auto" alt="Logo">
-                        <div class="flex flex-col">
+                        
+                        {{-- FIX: Tambah gap-0.5 untuk spasi --}}
+                        <div class="flex flex-col gap-0.5">
                             <span class="font-black text-slate-800 tracking-tight leading-none text-lg">SiagaBencana</span>
                             <span class="text-[9px] font-bold text-blue-600 uppercase tracking-widest leading-none">Learning Hub</span>
                         </div>
-                    </a>
+                    </div>
                     
                     {{-- Desktop Menu Links --}}
                     <div class="hidden sm:ml-10 sm:flex sm:space-x-8">
@@ -42,11 +51,10 @@
                            class="inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium leading-5 transition duration-150 ease-in-out {{ request()->routeIs('user.selection') ? 'border-blue-500 text-slate-900' : 'border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300' }}">
                             Kategori
                         </a>
-                        {{-- Bisa tambah menu lain disini --}}
                     </div>
                 </div>
 
-                {{-- User Profile Dropdown --}}
+                {{-- 2. USER PROFILE DROPDOWN --}}
                 <div class="hidden sm:flex sm:items-center sm:ml-6">
                     <div class="relative" x-data="{ open: false }" @click.away="open = false" @close.stop="open = false">
                         <div @click="open = ! open" class="cursor-pointer flex items-center gap-2 px-3 py-2 rounded-full hover:bg-slate-100 transition">
@@ -101,5 +109,8 @@
             <p class="text-slate-400 text-sm">&copy; {{ date('Y') }} SiagaBencana Aceh. Platform Edukasi Digital.</p>
         </div>
     </footer>
+
+    @stack('scripts')
+
 </body>
 </html>
