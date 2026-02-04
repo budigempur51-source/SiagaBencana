@@ -7,6 +7,7 @@ use App\Http\Controllers\VideoController;
 use App\Http\Controllers\LearningModuleController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\UserContentController;
+use App\Http\Controllers\VideoStreamController; // <--- Import Controller Baru
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\SocialAuthController;
 
@@ -29,6 +30,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // FITUR BARU: BACA MODUL (Book View)
     Route::get('/belajar/modul/{module:slug}/baca', [UserContentController::class, 'read'])->name('user.module.read');
+
+    // === FITUR STREAMING VIDEO (FIX SEEK/SKIP) ===
+    Route::get('/stream/video/{video}', [VideoStreamController::class, 'stream'])->name('video.stream');
 
     // Profile Settings
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

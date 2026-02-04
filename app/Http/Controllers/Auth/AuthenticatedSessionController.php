@@ -28,15 +28,18 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        // CEK ROLE USER & REDIRECT SESUAI HAK AKSES
         $user = Auth::user();
 
+        // FIX LOGIC:
+        // Kita hapus 'intended()' supaya user tidak mental balik ke halaman Home/Welcome.
+        // Kita paksa redirect ke dashboard masing-masing (Hard Redirect).
+
         if ($user->role === 'admin') {
-            return redirect()->intended(route('dashboard', absolute: false));
+            return redirect()->route('dashboard');
         }
 
         // Jika user biasa, lempar ke Halaman Belajar
-        return redirect()->intended(route('user.selection', absolute: false));
+        return redirect()->route('user.selection');
     }
 
     /**

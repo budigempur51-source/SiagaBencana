@@ -2,59 +2,61 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Support\Facades\Storage;
 
 class LearningModule extends Model
 {
-    /**
-     * White-listing attributes.
-     */
+    use HasFactory;
+
     protected $fillable = [
         'topic_id',
         'title',
         'slug',
         'file_path',
+        'cover_image', // Pastikan ini ada untuk fitur Cover
         'file_type',
         'file_size',
         'description',
         'summary',
-        'is_featured'
+        'is_featured',
     ];
 
     /**
-     * Cast attributes.
+     * Relasi ke Topic.
      */
-    protected $casts = [
-        'is_featured' => 'boolean',
-        'file_size' => 'integer',
-    ];
-
-    /**
-     * Relasi ke Topik.
-     */
-    public function topic(): BelongsTo
+    public function topic()
     {
         return $this->belongsTo(Topic::class);
     }
 
     /**
-     * Helper untuk mendapatkan URL file yang bisa diakses publik.
+     * Helper: Format ukuran file dari bytes ke KB/MB
+     * Dipakai di: resources/views/modules/index.blade.php
      */
-    public function getFileUrl(): string
+    public function getFormattedFileSize()
     {
-        return Storage::url($this->file_path);
+        $bytes = $this->file_size;
+
+        if ($bytes >= 1048576) {
+            return number_format($bytes / 1048576, 2) . ' MB';
+        } elseif ($bytes >= 1024) {
+            return number_format($bytes / 1024, 2) . ' KB';
+        } elseif ($bytes > 1) {
+            return $bytes . ' bytes';
+        } elseif ($bytes == 1) {
+            return $bytes . ' byte';
+        } else {
+            return '0 bytes';
+        }
     }
 
     /**
-     * Helper untuk memformat ukuran file agar enak dibaca manusia.
+     * Helper: Dapatkan URL publik file
+     * Dipakai di: resources/views/modules/index.blade.php
      */
-    public function getFormattedFileSize(): string
+    public function getFileUrl()
     {
-        $bytes = $this->file_size;
-        $units = ['B', 'KB', 'MB', 'GB'];
-        for ($i = 0; $bytes > 1024; $i++) $bytes /= 1024;
-        return round($bytes, 2) . ' ' . $units[$i];
+        return asset('storage/' . $this->file_path);
     }
 }

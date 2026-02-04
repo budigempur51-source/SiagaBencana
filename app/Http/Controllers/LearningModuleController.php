@@ -33,32 +33,39 @@ class LearningModuleController extends Controller
      */
     public function store(Request $request)
     {
-        // PENTING: Untuk fitur "Buku Digital", kita batasi hanya PDF.
-        // File Word/PPT tidak bisa dirender browser native sebagai buku.
         $validated = $request->validate([
             'topic_id'    => 'required|exists:topics,id',
             'title'       => 'required|string|max:255',
-            'file'        => 'required|file|mimes:pdf|max:20480', // Hanya PDF, Max 20MB
+            'file'        => 'required|file|mimes:pdf|max:20480', // PDF Max 20MB
+            'cover_image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048', // Cover Max 2MB
             'description' => 'nullable|string',
             'is_featured' => 'boolean',
         ]);
 
+        // 1. Upload File PDF (Wajib)
         if ($request->hasFile('file')) {
             $file = $request->file('file');
             $path = $file->store('learning-modules', 'public');
             
             $validated['file_path'] = $path;
-            $validated['file_type'] = $file->getClientOriginalExtension(); // Pasti 'pdf'
+            $validated['file_type'] = $file->getClientOriginalExtension();
             $validated['file_size'] = $file->getSize();
         }
 
-        $validated['slug'] = Str::slug($request->title) . '-' . Str::random(5); // Tambah random string biar slug unik
+        // 2. Upload Cover Image (Opsional)
+        if ($request->hasFile('cover_image')) {
+            $cover = $request->file('cover_image');
+            $coverPath = $cover->store('module-covers', 'public');
+            $validated['cover_image'] = $coverPath;
+        }
+
+        $validated['slug'] = Str::slug($request->title) . '-' . Str::random(5);
         $validated['summary'] = Str::limit($request->description, 150);
         $validated['is_featured'] = $request->has('is_featured');
 
         LearningModule::create($validated);
 
-        return redirect()->route('modules.index')->with('success', 'Modul PDF berhasil diunggah dan siap dibaca!');
+        return redirect()->route('modules.index')->with('success', 'Modul berhasil ditambahkan!');
     }
 
     /**
@@ -78,13 +85,16 @@ class LearningModuleController extends Controller
         $validated = $request->validate([
             'topic_id'    => 'required|exists:topics,id',
             'title'       => 'required|string|max:255',
-            'file'        => 'nullable|file|mimes:pdf|max:20480', // Hanya PDF
+            'file'        => 'nullable|file|mimes:pdf|max:20480',
+            'cover_image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
             'description' => 'nullable|string',
             'is_featured' => 'boolean',
         ]);
 
+        // 1. Cek Update PDF
         if ($request->hasFile('file')) {
-            if ($module->file_path) {
+            // Hapus file lama
+            if ($module->file_path && Storage::disk('public')->exists($module->file_path)) {
                 Storage::disk('public')->delete($module->file_path);
             }
 
@@ -94,6 +104,18 @@ class LearningModuleController extends Controller
             $validated['file_path'] = $path;
             $validated['file_type'] = $file->getClientOriginalExtension();
             $validated['file_size'] = $file->getSize();
+        }
+
+        // 2. Cek Update Cover Image
+        if ($request->hasFile('cover_image')) {
+            // Hapus cover lama jika ada
+            if ($module->cover_image && Storage::disk('public')->exists($module->cover_image)) {
+                Storage::disk('public')->delete($module->cover_image);
+            }
+
+            $cover = $request->file('cover_image');
+            $coverPath = $cover->store('module-covers', 'public');
+            $validated['cover_image'] = $coverPath;
         }
 
         $validated['slug'] = Str::slug($request->title);
@@ -106,12 +128,18 @@ class LearningModuleController extends Controller
     }
 
     /**
-     * Hapus modul dan filenya.
+     * Hapus modul dan semua filenya.
      */
     public function destroy(LearningModule $module)
     {
-        if ($module->file_path) {
+        // Hapus File PDF
+        if ($module->file_path && Storage::disk('public')->exists($module->file_path)) {
             Storage::disk('public')->delete($module->file_path);
+        }
+
+        // Hapus Cover Image
+        if ($module->cover_image && Storage::disk('public')->exists($module->cover_image)) {
+            Storage::disk('public')->delete($module->cover_image);
         }
         
         $module->delete();
