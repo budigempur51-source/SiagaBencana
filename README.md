@@ -119,6 +119,7 @@ php artisan key:generate
 ```bash
 # Buat database 'edukasi_bencana' di MySQL Anda
 # Jalankan migrasi dan data awal
+mysql -u root -e "CREATE DATABASE IF NOT EXISTS edukasi_bencana;"
 php artisan migrate:fresh --seed
 
 # Hubungkan storage untuk thumbnail topik
