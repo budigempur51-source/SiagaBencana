@@ -1,36 +1,41 @@
-<div class="flex flex-col h-full py-6 px-4 bg-slate-900">
+<div class="flex flex-col h-full bg-slate-900 text-white relative">
     
-    {{-- LOGO & BRANDING (FIXED SPACING) --}}
-    <div class="flex flex-col items-center px-4 mb-10">
-        {{-- Logo Icon --}}
-        <div class="mb-4 p-3 bg-white/5 rounded-2xl border border-white/10 shadow-lg">
-            <x-application-logo class="w-12 h-12 fill-current text-blue-400" />
+    {{-- TOMBOL CLOSE (Hanya Muncul di Mobile/md:hidden) --}}
+    <button @click="sidebarOpen = false" class="absolute top-4 right-4 text-slate-400 hover:text-white md:hidden">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+    </button>
+
+    {{-- LOGO & BRANDING --}}
+    <div class="flex flex-col items-center px-6 pt-8 pb-8">
+        {{-- Logo Inisial 'SB' --}}
+        <div class="mb-4 w-14 h-14 bg-gradient-to-br from-blue-600 to-blue-800 rounded-2xl border border-blue-400/30 shadow-lg shadow-blue-900/50 flex items-center justify-center cursor-default select-none group hover:scale-105 transition duration-300">
+            <span class="text-xl font-black text-white tracking-tighter group-hover:animate-pulse">SB</span>
         </div>
         
-        {{-- Text Branding dengan Spasi --}}
-        <div class="text-center flex flex-col gap-1"> {{-- FIX: Tambah gap-1 --}}
-            <h2 class="text-white font-extrabold text-xl tracking-tight leading-none">
+        {{-- Text Branding --}}
+        <div class="text-center flex flex-col gap-1">
+            <h2 class="text-white font-extrabold text-lg tracking-tight leading-none">
                 SiagaBencana
             </h2>
-            <div class="h-0.5 w-8 bg-blue-500/50 mx-auto my-1 rounded-full"></div> {{-- Garis Pemisah Kecil --}}
+            <div class="h-0.5 w-8 bg-blue-500/50 mx-auto my-1 rounded-full"></div>
             <p class="text-slate-400 text-[9px] font-bold uppercase tracking-widest text-opacity-80">
-                Aceh Mitigation Platform
+                Admin Panel
             </p>
         </div>
     </div>
 
-    {{-- NAVIGASI MENU --}}
-    <nav class="flex-1 space-y-2">
-        <p class="px-4 text-[10px] font-extrabold text-slate-500 uppercase tracking-widest mb-3">Main Menu</p>
+    {{-- SCROLLABLE MENU AREA --}}
+    <div class="flex-1 overflow-y-auto px-4 space-y-2 custom-scrollbar">
+        <p class="px-2 text-[10px] font-extrabold text-slate-500 uppercase tracking-widest mb-2 mt-2">Main Menu</p>
         
         <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" class="sidebar-link group">
             <div class="p-1.5 rounded-lg bg-white/5 group-hover:bg-blue-500/20 text-slate-400 group-hover:text-blue-400 transition mr-3">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg>
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg>
             </div>
             <span class="font-medium">{{ __('Dashboard') }}</span>
         </x-nav-link>
 
-        <p class="px-4 text-[10px] font-extrabold text-slate-500 uppercase tracking-widest mt-8 mb-3">Content Manager</p>
+        <p class="px-2 text-[10px] font-extrabold text-slate-500 uppercase tracking-widest mt-6 mb-2">Content Manager</p>
 
         <x-nav-link :href="route('categories.index')" :active="request()->routeIs('categories.*')" class="sidebar-link group">
             <div class="p-1.5 rounded-lg bg-white/5 group-hover:bg-purple-500/20 text-slate-400 group-hover:text-purple-400 transition mr-3">
@@ -59,17 +64,17 @@
             </div>
             <span class="font-medium">{{ __('Modul Belajar') }}</span>
         </x-nav-link>
-    </nav>
+    </div>
 
     {{-- FOOTER PROFILE --}}
-    <div class="mt-auto border-t border-slate-800 pt-6">
-        <div class="flex items-center px-2 mb-4 bg-slate-800/50 p-3 rounded-xl border border-slate-700/50">
+    <div class="mt-auto border-t border-slate-800 p-4 bg-slate-900 z-10">
+        <div class="flex items-center gap-3 mb-3 p-2 rounded-xl bg-slate-800/50 border border-slate-700/50">
             <div class="flex-shrink-0">
                 <div class="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center font-bold text-white text-xs shadow-lg">
                     {{ substr(Auth::user()->name, 0, 1) }}
                 </div>
             </div>
-            <div class="ml-3 overflow-hidden">
+            <div class="overflow-hidden">
                 <p class="text-xs font-bold text-white truncate">{{ Auth::user()->name }}</p>
                 <p class="text-[10px] text-slate-400 truncate">Administrator</p>
             </div>
@@ -77,8 +82,9 @@
         
         <form method="POST" action="{{ route('logout') }}">
             @csrf
-            <button type="submit" class="w-full flex items-center justify-center px-3 py-2 text-xs font-bold uppercase tracking-wider text-red-400 hover:bg-red-500/10 hover:text-red-300 rounded-lg transition-all duration-200 border border-transparent hover:border-red-500/20">
-                {{ __('Sign Out') }}
+            <button type="submit" class="w-full flex items-center justify-center px-3 py-2 text-xs font-bold uppercase tracking-wider text-red-400 hover:bg-red-500/10 hover:text-red-300 rounded-lg transition-all duration-200 border border-transparent hover:border-red-500/20 group">
+                <svg class="w-4 h-4 mr-2 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+                Sign Out
             </button>
         </form>
     </div>
@@ -104,6 +110,10 @@
         border: 1px solid rgba(59, 130, 246, 0.2);
         box-shadow: 0 0 15px rgba(59, 130, 246, 0.1);
     }
-    /* Icon color active state handled via class binding in blade */
     .sidebar-link.active svg { color: #60a5fa; }
+    
+    .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #475569; }
 </style>

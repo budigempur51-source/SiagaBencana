@@ -29,24 +29,42 @@
             border: 1px solid rgba(255, 255, 255, 0.4);
         }
 
-        /* --- 2. BUTTON GLOW --- */
+        /* --- 2. ENHANCED BUTTON GLOW & ANIMATION --- */
         .btn-emerald-clean {
             background: linear-gradient(135deg, #10b981 0%, #059669 100%);
             box-shadow: 0 0 20px rgba(16, 185, 129, 0.3), inset 0 1px 0 rgba(255,255,255,0.2);
             border: 1px solid rgba(16, 185, 129, 0.2);
             transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-emerald-clean::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 70%);
+            transform: scale(0);
+            transition: transform 0.6s ease;
+        }
+
+        .btn-emerald-clean:hover::before {
+            transform: scale(1);
         }
 
         .btn-emerald-clean:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 15px 35px -5px rgba(16, 185, 129, 0.5);
-            filter: brightness(1.1);
+            transform: translateY(-3px) scale(1.03);
+            box-shadow: 0 20px 40px -8px rgba(16, 185, 129, 0.6);
+            filter: brightness(1.15);
         }
 
-        /* --- 3. TYPOGRAPHY --- */
+        /* --- 3. ENHANCED TYPOGRAPHY & LAYOUT --- */
         .hero-title {
             font-size: clamp(2.5rem, 7vw, 6rem);
-            line-height: 1.1; /* Sedikit lebih longgar di HP */
+            line-height: 1.1;
             letter-spacing: -0.04em;
             font-weight: 900;
             text-shadow: 0 10px 40px rgba(0,0,0,0.4);
@@ -85,6 +103,19 @@
             transform: translateX(0) scale(1);
             z-index: 10;
         }
+        
+        /* --- 6. MOBILE-ONLY STYLING --- */
+        @media (max-width: 768px) {
+            .mobile-nav-button {
+                padding: 0.8rem 1.5rem;
+                font-size: 1.1rem;
+                border-radius: 1.25rem;
+            }
+            
+            .mobile-nav-button:hover {
+                transform: translateY(-2px) scale(1.02);
+            }
+        }
     </style>
 </head>
 <body class="antialiased bg-slate-950 text-white overflow-x-hidden selection:bg-emerald-500 selection:text-white">
@@ -100,15 +131,19 @@
                     </div>
                 </div>
 
-                <div class="flex items-center space-x-4 lg:space-x-8">
+                <div class="flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-4 lg:space-x-8">
                     @auth
                         <a href="{{ route('dashboard') }}" class="text-xs md:text-sm font-bold text-white/90 hover:text-emerald-400 transition text-shadow-sm">Dashboard</a>
                     @else
-                        <a href="{{ route('login') }}" class="text-xs md:text-sm font-bold text-white/90 hover:text-white transition text-shadow-sm hidden sm:inline-block">Masuk</a>
-                        <a href="{{ route('register') }}" class="btn-emerald-clean px-5 py-2 md:px-8 md:py-3.5 text-white text-[10px] md:text-sm font-black rounded-full shadow-2xl">
+                        <a href="{{ route('login') }}" class="text-xs font-bold text-white/90 hover:text-white transition text-shadow-sm block sm:hidden text-center mobile-nav-button">Masuk</a>
+                        <a href="{{ route('register') }}" class="btn-emerald-clean px-6 py-3 md:px-8 md:py-3.5 text-white text-sm md:text-lg font-black rounded-full shadow-2xl w-full sm:w-auto mobile-nav-button">
                             Daftar <span class="hidden sm:inline">Sekarang</span>
                         </a>
+                        <a href="{{ route('login') }}" class="text-xs md:text-sm font-bold text-white/90 hover:text-white transition text-shadow-sm hidden sm:block">Masuk</a>
                     @endauth
+                    <div class="hidden lg:block">
+                        <img src="{{ asset('avatar/logopemerintah.png') }}" alt="Pemerintah Logo" class="h-12 lg:h-14 w-auto">
+                    </div>
                 </div>
             </div>
         </div>
@@ -229,7 +264,7 @@
     </footer>
 
     <script>
-        // --- 1. Navbar Scroll Styling ---
+        // --- 1. Enhanced Navbar Scroll Styling ---
         const nav = document.getElementById('mainNav');
         window.addEventListener('scroll', () => {
             if (window.scrollY > 50) {
@@ -241,21 +276,20 @@
             }
         });
 
-        // --- 2. Slider (Otomatis Stop di HP karena hidden) ---
+        // --- 2. Enhanced Slider (Otomatis Stop di HP karena hidden) ---
         let current = 0;
         const items = document.querySelectorAll('.slide-item');
         
         function rotate() {
-            // Cek apakah slider visible (Desktop only)
             if(items.length > 0 && window.innerWidth >= 1024) { 
                 items[current].classList.remove('slide-active');
                 current = (current + 1) % items.length;
                 items[current].classList.add('slide-active');
             }
         }
-        setInterval(rotate, 5000);
+        setInterval(rotate, 4500);
 
-        // --- 3. iOS Video Autoplay Fix ---
+        // --- 3. Enhanced iOS Video Autoplay Fix ---
         document.addEventListener('DOMContentLoaded', () => {
             const video = document.getElementById('bgVideo');
             const forcePlay = () => {
@@ -270,6 +304,19 @@
             forcePlay();
             document.addEventListener('touchstart', forcePlay, { passive: true });
             document.addEventListener('click', forcePlay);
+        });
+
+        // --- 4. Enhanced Button Animation ---
+        document.querySelectorAll('.btn-emerald-clean').forEach(button => {
+            button.addEventListener('mouseenter', () => {
+                button.style.zIndex = '10';
+                button.style.transform = 'translateY(-3px) scale(1.03)';
+            });
+            
+            button.addEventListener('mouseleave', () => {
+                button.style.zIndex = '1';
+                button.style.transform = 'translateY(0) scale(1)';
+            });
         });
     </script>
 </body>
