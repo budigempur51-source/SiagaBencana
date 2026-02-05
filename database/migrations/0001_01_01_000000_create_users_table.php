@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\UserRole;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -18,9 +19,14 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->string('role')->default('user'); 
+            // Menggunakan nilai dari Enum untuk default value
+            $table->string('role')->default(UserRole::USER->value); 
             $table->rememberToken();
             $table->timestamps();
+            
+            // Kolom social login (Opsional, ditambahkan agar konsisten dengan Model jika migrasi di-reset)
+            // Namun karena ada migrasi terpisah untuk social login, kita biarkan struktur asli
+            // agar tidak konflik dengan migrasi '2026_02_02_000000_add_social_fields_to_users_table.php'
         });
 
         // 2. Tabel Password Reset Tokens
@@ -40,7 +46,7 @@ return new class extends Migration
             $table->integer('last_activity')->index();
         });
 
-        // 4. Tabel Cache (Penyebab Error Tadi)
+        // 4. Tabel Cache
         Schema::create('cache', function (Blueprint $table) {
             $table->string('key')->primary();
             $table->mediumText('value');

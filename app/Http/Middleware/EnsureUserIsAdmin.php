@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Enums\UserRole;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,7 +17,8 @@ class EnsureUserIsAdmin
     public function handle(Request $request, Closure $next): Response
     {
         // Pastikan user sudah login DAN role-nya adalah admin
-        if ($request->user() && $request->user()->role !== 'admin') {
+        // Karena sudah dicasting di Model, $request->user()->role adalah instance Enum
+        if ($request->user() && $request->user()->role !== UserRole::ADMIN) {
             // Jika bukan admin, tendang ke halaman home
             return redirect('/');
         }
